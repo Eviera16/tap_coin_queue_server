@@ -48,14 +48,27 @@ process.on('message', (message) => {
     if (message.event_type == "ADD_USER") {
         if (INSERT_ARRAY_1.status == ARRAY_STATUS.FEEDING) {
             INSERT_ARRAY_1.array.push(message.user);
+            console.log("PUSHING USER ONTO ARRAY 1");
+            console.log(INSERT_ARRAY_1);
+            console.log(INSERT_ARRAY_2);
+            console.log(INSERT_ARRAY_2);
         }
         else if (INSERT_ARRAY_2.status == ARRAY_STATUS.FEEDING) {
             INSERT_ARRAY_2.array.push(message.user);
+            console.log("PUSHING USER ONTO ARRAY 2");
+            console.log(INSERT_ARRAY_1);
+            console.log(INSERT_ARRAY_2);
+            console.log(INSERT_ARRAY_2);
         }
         else if (INSERT_ARRAY_3.status == ARRAY_STATUS.FEEDING) {
             INSERT_ARRAY_3.array.push(message.user);
+            console.log("PUSHING USER ONTO ARRAY 3");
+            console.log(INSERT_ARRAY_1);
+            console.log(INSERT_ARRAY_2);
+            console.log(INSERT_ARRAY_2);
         }
         else {
+            console.log("PUSHING USER ELSE");
             // send message to user that queue is full 
             // figure out requeueing user when there is space
         }
@@ -190,7 +203,9 @@ function disconnect_user(user) {
 }
 
 function sending_array_logic(array1, array2, array3) {
+    console.log("IN SENDING ARRAY LOGIC");
     if (array1.array.length > 0) {
+        console.log("ARRAY LENGTH IS GREATER THAN 0");
         // figure out cycling through threads
         // thread1_checking_queue = true;
         thread1.postMessage({ event_type: "CHECK_QUEUE", users: array1.array });
@@ -206,6 +221,9 @@ function sending_array_logic(array1, array2, array3) {
         // come back to this later
         // if (thread1_checking_queue == false) {
         // }
+    }
+    else{
+        console.log("NO ONE IN QUEUE TO SEND");
     }
 
 }
@@ -223,7 +241,9 @@ function adjust_array_status(array, number) {
 }
 
 function check_queue() {
+    console.log("IN CHECK QUEUE FUNCTION IN NOOB CLUSTER");
     if (!sending_users) {
+        console.log("NOT SENDING USERS");
         if (INSERT_ARRAY_1.status == ARRAY_STATUS.INACTIVE) {
             INSERT_ARRAY_1.status = ARRAY_STATUS.FEEDING;
             INSERT_ARRAY_2.status = ARRAY_STATUS.INACTIVE;
@@ -241,18 +261,21 @@ function check_queue() {
         }
 
         if (INSERT_ARRAY_1.status == ARRAY_STATUS.SENDING) {
+            console.log("SENDING USERS TO ARRAY 1 BELOW");
             console.log(INSERT_ARRAY_1.array);
             sending_users = true;
             sending_array_logic(INSERT_ARRAY_1, INSERT_ARRAY_2, INSERT_ARRAY_3);
             sending_users = false;
         }
         else if (INSERT_ARRAY_2.status == ARRAY_STATUS.SENDING) {
+            console.log("SENDING USERS TO ARRAY 2 BELOW");
             console.log(INSERT_ARRAY_2.array);
             sending_users = true;
             sending_array_logic(INSERT_ARRAY_2, INSERT_ARRAY_1, INSERT_ARRAY_3);
             sending_users = false;
         }
         else if (INSERT_ARRAY_3.status == ARRAY_STATUS.SENDING) {
+            console.log("SENDING USERS TO ARRAY 3 BELOW");
             console.log(INSERT_ARRAY_3.array);
             sending_users = true;
             sending_array_logic(INSERT_ARRAY_3, INSERT_ARRAY_1, INSERT_ARRAY_2);
@@ -260,6 +283,7 @@ function check_queue() {
         }
     }
     else {
+        console.log("SENDING USERS");
         if (INSERT_ARRAY_1.status == ARRAY_STATUS.INACTIVE) {
             INSERT_ARRAY_1.status == ARRAY_STATUS.FEEDING;
         }

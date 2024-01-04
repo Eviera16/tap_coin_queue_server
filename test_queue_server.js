@@ -170,6 +170,7 @@ if (cluster.isMaster) {
 
         if (all_threads_running) {
             socket.on('PUTINQUEUE', (data) => {
+                console.log("ENQUEUEING USER");
                 var data_split = data.split("|");
                 const TOKEN = data_split[0];
                 const LEAGUE = data_split[1];
@@ -286,10 +287,14 @@ if (cluster.isMaster) {
         else if (message.event_type == "MATCH_FOUND") {
             const FOUND_PLAYER_1 = all_clients.get(message.player_1.socketId);
             const FOUND_PLAYER_2 = all_clients.get(message.player_2.socketId);
+            console.log("FOUND PLAYER 1: ", FOUND_PLAYER_1);
+            console.log("FOUND PLAYER 2: ", FOUND_PLAYER_2);
             if (FOUND_PLAYER_1.in_game == false && FOUND_PLAYER_2.in_game == false) {
+                console.log("IN GAME IS FALSE FOR BOTH USERS");
                 FOUND_PLAYER_1.in_game = true;
                 FOUND_PLAYER_2.in_game = true;
                 const MESSAGE = FOUND_PLAYER_1.token + "|" + FOUND_PLAYER_2.token;
+                console.log("EMITTING MESSAGE: ", MESSAGE);
                 io.to(message.player_1.socketId).emit("FOUNDGAME1", MESSAGE);
             }
         }
@@ -568,30 +573,39 @@ function check_threads_are_up() {
 function send_users_to_leagues(league, user) {
     switch (league) {
         case "1":
+            console.log("SENDING USER TO NOOB CLUSTER");
             NOOB_CLUSTER.send({ event_type: "ADD_USER", user: user });
             break;
         case "2":
+            console.log("SENDING USER TO BAD CLUSTER");
             BAD_CLUSTER.send({ event_type: "ADD_USER", user: user });
             break;
         case "3":
+            console.log("SENDING USER TO OKAY CLUSTER");
             OKAY_CLUSTER.send({ event_type: "ADD_USER", user: user });
             break;
         case "4":
+            console.log("SENDING USER TO BETTER CLUSTER");
             BETTER_CLUSTER.send({ event_type: "ADD_USER", user: user });
             break;
         case "5":
+            console.log("SENDING USER TO GOOD CLUSTER");
             GOOD_CLUSTER.send({ event_type: "ADD_USER", user: user });
             break;
         case "6":
+            console.log("SENDING USER TO SOLID CLUSTER");
             SOLID_CLUSTER.send({ event_type: "ADD_USER", user: user });
             break;
         case "7":
+            console.log("SENDING USER TO SUPER CLUSTER");
             SUPER_CLUSTER.send({ event_type: "ADD_USER", user: user });
             break;
         case "8":
+            console.log("SENDING USER TO MEGA CLUSTER");
             MEGA_CLUSTER.send({ event_type: "ADD_USER", user: user });
             break;
         default:
+            console.log("SENDING USER TO GODLY CLUSTER");
             GODLY_CLUSTER.send({ event_type: "ADD_USER", user: user });
             break;
     }

@@ -60,10 +60,12 @@ function sleep(ms) {
 var left_over_queue = []
 
 function check_queue() {
+    console.log("IN CHECK QUEUE FUNCTION IN THREAD 1");
     checking_queue = true;
     const queue_length = main_queue.get_queue_length();
     var no_more_matches = false;
     if (queue_length > 0) {
+        console.log("QUEUE LENGTH IS GREATER THAN 1");
         var i = 0;
         while (no_more_matches == false) {
             if (adding_user) {
@@ -71,38 +73,53 @@ function check_queue() {
                 break;
             }
             if (left_over_queue.length > 0) {
+                console.log("USERS ARE IN THE LEFT OVER QUEUE");
                 if (i != left_over_queue.length) {
                     const player_1 = left_over_queue[i];
                     const player_2 = main_queue.dequeue();
-
+                    console.log(player_1);
+                    console.log(player_2);
                     if (player_1 == player_2) {
+                        console.log("PLAYERS ARE THE SAME DISCONNECTING ...");
                         parentPort.postMessage({ event_type: "DISCONNECT_USER", result: true, token: player_1 });
                     }
                     else {
+                        console.log("MATCHED PLAYERS !!!");
                         left_over_queue.splice(i, 1);
                         parentPort.postMessage({ event_type: "MATCH_FOUND", player_1: player_1, player_2: player_2 })
                     }
                 }
                 else {
+                    console.log("SETTING LEFT OVER QUEUE TO EMPTY");
                     left_over_queue = [];
                 }
             }
             else if (main_queue.peek(0)) {
+                console.log("MAIN QUEUE PEEK IS TRUE");
                 const player_1 = main_queue.dequeue();
                 const player_2 = main_queue.dequeue();
+                console.log(player_1);
+                console.log(player_2);
                 if (player_1 == player_2) {
+                    console.log("PLAYERS ARE THE SAME DISCONNECTING ...");
                     parentPort.postMessage({ event_type: "DISCONNECT_USER", result: true, token: player_1 });
                 }
                 else {
+                    console.log("MATCHED PLAYERS !!!");
                     parentPort.postMessage({ event_type: "MATCH_FOUND", player_1: player_1, player_2: player_2 })
                 }
                 i++;
             }
             else {
+                console.log("IN THE ELSE STATEMENT");
                 if (main_queue.get_index(0) != null) {
+                    console.log("MAIN QUEUE HAS SOMEONE AT INDEX 0");
                     var last_user = main_queue.get_index(0)
+                    console.log(last_user);
                     main_queue.remove(last_user)
+                    console.log("NEW MAIN QUEUE: ", main_queue.get_queue());
                     left_over_queue.push(last_user)
+                    console.log("NEW LEFT OVER QUEUE: ", left_over_queue);
                     // if there is a user, then send it back to clusters to be added to first available array
                     // and send back that checking queue for this thread is done
                     // parentPort.postMessage({ event_type: "THREAD_DONE", workerId: data.workerId })
@@ -126,7 +143,10 @@ function check_queue() {
 parentPort.on('message', (message) => {
     // console.log(`Received message right here in worker ${data.workerId}:`, message['content']['token']);
     if (message["event_type"] == "CHECK_QUEUE") {
+        console.log("CHECK QUEUE EVENT IN THREAD 1");
         main_queue.set_queue(message["users"]);
+        console.log("MAIN QUEUE BELOW");
+        console.log(main_queue.get_queue());
         check_queue();
     }
     else if (message['event_type'] == "DISCONNECT_USER") {

@@ -178,6 +178,8 @@ if (cluster.isMaster) {
                 var new_client = new QueueClient(TOKEN, socket.id, LEAGUE, XCOORD, YCOORD);
                 all_clients.set(socket.id, new_client);
                 tokens_to_sockets.set(TOKEN, socket.id);
+                // current line: 181 | Dont forget to erase this eventually | line: 182 
+                LEAGUE = "1"
                 send_users_to_leagues(LEAGUE, new_client)
             })
             socket.on('disconnect', () => {

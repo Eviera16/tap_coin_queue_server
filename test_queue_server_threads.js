@@ -51,21 +51,21 @@ process.on('message', (message) => {
             console.log("PUSHING USER ONTO ARRAY 1");
             console.log(INSERT_ARRAY_1);
             console.log(INSERT_ARRAY_2);
-            console.log(INSERT_ARRAY_2);
+            console.log(INSERT_ARRAY_3);
         }
         else if (INSERT_ARRAY_2.status == ARRAY_STATUS.FEEDING) {
             INSERT_ARRAY_2.array.push(message.user);
             console.log("PUSHING USER ONTO ARRAY 2");
             console.log(INSERT_ARRAY_1);
             console.log(INSERT_ARRAY_2);
-            console.log(INSERT_ARRAY_2);
+            console.log(INSERT_ARRAY_3);
         }
         else if (INSERT_ARRAY_3.status == ARRAY_STATUS.FEEDING) {
             INSERT_ARRAY_3.array.push(message.user);
             console.log("PUSHING USER ONTO ARRAY 3");
             console.log(INSERT_ARRAY_1);
             console.log(INSERT_ARRAY_2);
-            console.log(INSERT_ARRAY_2);
+            console.log(INSERT_ARRAY_3);
         }
         else {
             console.log("PUSHING USER ELSE");
@@ -222,7 +222,7 @@ function sending_array_logic(array1, array2, array3) {
         // if (thread1_checking_queue == false) {
         // }
     }
-    else{
+    else {
         console.log("NO ONE IN QUEUE TO SEND");
     }
 
